@@ -1,0 +1,18 @@
+<div class="layout">
+  <app-header *ngIf="!isAuthRoute()" (toggleSidebar)="aside.toggleSidebar()"></app-header>
+  <app-aside *ngIf="!isAuthRoute()" #aside></app-aside>
+  <main>
+    <div class="messages-container">
+      <div *ngFor="let message of messages" class="message" [ngClass]="[message.severity, message.hiding ? 'hiding' : '']">
+        <span class="message-icon">{{message.icon}}</span>
+        <div class="message-content">
+          <strong>{{message.summary}}</strong>
+          <p>{{message.detail}}</p>
+        </div>
+        <button class="close-btn" (click)="removeMessage(message)">×</button>
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer *ngIf="!isAuthRoute()"></app-footer>
+</div>

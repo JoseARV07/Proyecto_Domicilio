@@ -1,0 +1,114 @@
+/* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Contenedor principal */
+  .register-container {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { 
+      opacity: 0; 
+      transform: translateY(-20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+  
+  /* Título */
+  .register-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  /* Estilos de formulario */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #3586ff;
+    box-shadow: 0 0 0 2px rgba(53, 134, 255, 0.1);
+  }
+  
+  /* Botón */
+  .button-group {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .button-group button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3586ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button-group button:hover {
+    background-color: #2a6cc7;
+  }
+  
+  .button-group button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .register-link {
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+  }
+  
+  .register-link a {
+    color: #3586ff;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+  }
+  
+  .register-link a:hover {
+    color: #2a6cc7;
+  }
+
+  .register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }

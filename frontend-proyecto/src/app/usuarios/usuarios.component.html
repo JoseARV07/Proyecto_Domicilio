@@ -1,0 +1,125 @@
+<div class="usuarios-container">
+  <h2 class="usuarios-title">Gestión de Usuarios</h2>
+  
+  <div class="controls-container">
+    <div class="search-container">
+      <i class="pi pi-search search-icon"></i>
+      <input type="text" class="search-input" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar usuarios...">
+    </div>
+
+    <div class="button-group">
+      <button (click)="toggleOcultos()" class="icon-button" [attr.data-tooltip]="mostrandoOcultos ? 'Ocultar usuarios inactivos' : 'Mostrar usuarios inactivos'">
+        <i class="pi" [ngClass]="mostrandoOcultos ? 'pi-eye' : 'pi-eye-slash'"></i>
+      </button>
+      <button (click)="abrirFormularioCreacion()" class="icon-button" data-tooltip="Crear nuevo usuario">
+        <i class="pi pi-user-plus"></i>
+      </button>
+      <button (click)="exportarUsuarios()" class="icon-button" data-tooltip="Exportar a Excel">
+        <i class="pi pi-file-excel"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Indicador de carga -->
+  <div *ngIf="cargando" class="spinner-container">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="table-wrapper" *ngIf="!cargando">
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let columna of columnasVisibles" (click)="ordenar(columna)">
+            {{obtenerNombreColumna(columna)}}
+            <i class="pi" [ngClass]="{'pi-sort-amount-up-alt': ordenAscendente, 'pi-sort-amount-down': !ordenAscendente}" *ngIf="columnaOrdenada === columna"></i>
+          </th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuariosFiltrados">
+          <td *ngFor="let columna of columnasVisibles">
+            <ng-container [ngSwitch]="columna">
+              <ng-container *ngSwitchCase="'fecha_registro'">
+                {{ formatearFecha(usuario[columna]) }}
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                {{ usuario[columna] }}
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <button class="icon-button edit" (click)="editarUsuario(usuario)" data-tooltip="Editar">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button class="icon-button delete" (click)="eliminarUsuario(usuario.id_usuario)" data-tooltip="Eliminar">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
+    <span>Página {{paginaActual}} de {{totalPaginas}}</span>
+    <button (click)="cambiarPagina(1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+  </div>
+
+  <!-- Modal para editar/crear usuario -->
+  <div class="modal" [class.show]="mostrarModal" [class.closing]="cerrandoModal">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <h3>{{ usuarioSeleccionado.id_usuario ? 'Editar Usuario' : 'Crear Usuario' }}</h3>
+      <form (ngSubmit)="guardarUsuario()" #usuarioForm="ngForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" [(ngModel)]="usuarioSeleccionado.nombre" name="nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" [(ngModel)]="usuarioSeleccionado.apellido" name="apellido" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" [(ngModel)]="usuarioSeleccionado.email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" [(ngModel)]="usuarioSeleccionado.telefono" name="telefono" required>
+          </div>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" [(ngModel)]="usuarioSeleccionado.direccion" name="direccion" required>
+        </div>
+        
+        <div class="form-row" *ngIf="usuarioSeleccionado.id_usuario">
+          <div class="form-group">
+            <label for="oculto">Estado del usuario</label>
+            <p-inputSwitch [(ngModel)]="usuarioSeleccionado.oculto" name="oculto"></p-inputSwitch>
+            <span class="switch-label">{{ usuarioSeleccionado.oculto ? 'Inactivo' : 'Activo' }}</span>
+          </div>
+        </div>
+        
+        <div class="form-button-group">
+          <button type="submit" class="icon-button save" [disabled]="!usuarioForm.form.valid">
+            <i [class]="usuarioSeleccionado.id_usuario ? 'pi pi-sync' : 'pi pi-save'"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog [style]="{width: '400px'}" [baseZIndex]="10000" styleClass="custom-confirm-dialog">
+</p-confirmDialog>
+
+<p-toast key="bc"></p-toast>

@@ -1,0 +1,179 @@
+<div class="pedidos-container">
+  <h2 class="pedidos-title">Gestión de Pedidos</h2>
+  
+  <div class="controls-container">
+    <div class="search-container">
+      <i class="pi pi-search search-icon"></i>
+      <input type="text" class="search-input" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar pedidos...">
+    </div>
+
+    <div class="button-group">
+      <button (click)="abrirModal()" class="icon-button" data-tooltip="Crear nuevo pedido">
+        <i class="pi pi-plus"></i>
+      </button>
+      <button (click)="exportarExcel()" class="icon-button" data-tooltip="Exportar a Excel">
+        <i class="pi pi-file-excel"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Indicador de carga -->
+  <div *ngIf="cargando" class="spinner-container">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="table-wrapper" *ngIf="!cargando">
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let columna of columnasVisibles">{{obtenerNombreColumna(columna)}}</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of pedidosFiltrados">
+          <td *ngFor="let columna of columnasVisibles">
+            <ng-container [ngSwitch]="columna">
+              <ng-container *ngSwitchCase="'id_usuario'">
+                {{ obtenerNombreUsuario(pedido.id_usuario) }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'id_proveedor'">
+                {{ obtenerNombreProveedor(pedido.id_proveedor) }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'id_repartidor'">
+                {{ obtenerNombreRepartidor(pedido.id_repartidor) }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'fecha_hora_solicitud'">
+                {{ pedido.fecha_hora_solicitud | date:'short' }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'fecha_hora_entrega'">
+                {{ pedido.fecha_hora_entrega | date:'short' }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'total'">
+                {{ formatearPrecio(pedido.total) }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'costo_domicilio'">
+                {{ formatearPrecio(pedido.costo_domicilio) }}
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                {{ getPedidoProperty(pedido, columna) }}
+              </ng-container>
+            </ng-container>
+          </td>
+          <td>
+            <button class="icon-button edit" (click)="abrirModal(pedido)" data-tooltip="Editar">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button class="icon-button delete" (click)="eliminarPedido(pedido.id_pedido)" data-tooltip="Eliminar">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
+    <span>Página {{paginaActual}} de {{totalPaginas}}</span>
+    <button (click)="cambiarPagina(1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+  </div>
+
+  <!-- Modal para editar/crear pedido -->
+  <div class="modal" [class.show]="mostrarModal" [class.closing]="cerrandoModal">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <h3>{{ pedidoSeleccionado.id_pedido ? 'Editar Pedido' : 'Crear Pedido' }}</h3>
+      <form #pedidoForm="ngForm" (ngSubmit)="guardarPedido()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="id_usuario">Usuario</label>
+            <select id="id_usuario" name="id_usuario" class="form-select" [(ngModel)]="pedidoSeleccionado.id_usuario" (ngModelChange)="onUsuarioSeleccionado()" required>
+              <option [ngValue]="0">Seleccione un usuario</option>
+              <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id_usuario">{{usuario.nombre}}</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="id_proveedor">Proveedor</label>
+            <select id="id_proveedor" name="id_proveedor" class="form-select" [(ngModel)]="pedidoSeleccionado.id_proveedor" required>
+              <option [ngValue]="0">Seleccione un proveedor</option>
+              <option *ngFor="let proveedor of proveedores" [ngValue]="proveedor.id_proveedor">{{proveedor.nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="costo_domicilio">Costo de Domicilio</label>
+            <select id="costo_domicilio" name="costo_domicilio" class="form-select"
+                    [(ngModel)]="pedidoSeleccionado.costo_domicilio" 
+                    (ngModelChange)="onCostoDomicilioChange($event)" required>
+              <option [ngValue]="null">Seleccione un costo</option>
+              <option *ngFor="let costo of costosDomicilio" [ngValue]="costo">
+                {{formatearPrecio(costo)}}
+              </option>
+              <option [ngValue]="'custom'">Otro valor</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="metodo_pago">Método de Pago</label>
+            <select id="metodo_pago" name="metodo_pago" class="form-select"
+                    [(ngModel)]="pedidoSeleccionado.metodo_pago" required>
+              <option value="">Seleccione un método de pago</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="tarjeta_credito">Tarjeta de Crédito</option>
+              <option value="tarjeta_debito">Tarjeta de Débito</option>
+              <option value="transferencia_bancaria">Transferencia Bancaria</option>
+              <option value="paypal">PayPal</option>
+              <option value="nequi">Nequi</option>
+              <option value="daviplata">Daviplata</option>
+              <option value="pse">PSE</option>
+              <option value="bitcoin">Bitcoin</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="estado_pedido">Estado del Pedido</label>
+            <select id="estado_pedido" name="estado_pedido" class="form-select" [(ngModel)]="pedidoSeleccionado.estado_pedido" (ngModelChange)="onEstadoPedidoChange()" required>
+              <option value="">Seleccione un estado</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="en_proceso">En Proceso</option>
+              <option value="entregado">Entregado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="id_repartidor">Repartidor</label>
+            <select id="id_repartidor" name="id_repartidor" class="form-select" [(ngModel)]="pedidoSeleccionado.id_repartidor" required>
+              <option [ngValue]="null">Seleccione un repartidor</option>
+              <option *ngFor="let repartidor of repartidores" [ngValue]="repartidor.id_repartidor">{{repartidor.nombre}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="direccion_entrega">Dirección de Entrega</label>
+          <input type="text" id="direccion_entrega" name="direccion_entrega" class="form-control" [(ngModel)]="pedidoSeleccionado.direccion_entrega" required>
+        </div>
+
+        <div class="form-button-group">
+          <button type="submit" class="icon-button save" [disabled]="!pedidoForm.form.valid">
+            <i [class]="esEdicion ? 'pi pi-sync' : 'pi pi-save'"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog [style]="{width: '400px'}" [baseZIndex]="10000" styleClass="custom-confirm-dialog">
+</p-confirmDialog>
+
+<p-toast></p-toast>

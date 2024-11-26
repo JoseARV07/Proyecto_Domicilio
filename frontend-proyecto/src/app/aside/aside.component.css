@@ -1,0 +1,61 @@
+.aside-container {
+  width: 250px;
+  height: 100vh;
+  background-color: #ffffff; /* Fondo blanco */
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para el contenedor */
+  border-right: none; /* Eliminar la línea divisoria */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+:host ::ng-deep .p-sidebar {
+  width: 250px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más profunda */
+  border-top-right-radius: 12px; /* Bordes redondeados solo en la parte superior derecha */
+  border-bottom-right-radius: 12px; /* Bordes redondeados solo en la parte inferior derecha */
+  transform: translateX(-100%); /* Posición inicial fuera de la vista */
+  transition: transform 0.3s ease-out; /* Animación de deslizamiento */
+}
+
+:host ::ng-deep .p-sidebar.p-sidebar-active {
+  transform: translateX(0); /* Deslizar hacia dentro */
+}
+
+:host ::ng-deep .p-menu {
+  width: 100%;
+  border: none;
+}
+
+:host ::ng-deep .p-menu .p-menuitem-link {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem; /* Separar las opciones */
+  border-radius: 8px; /* Bordes redondeados */
+  transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+  color: #343a40; /* Color del texto */
+  font-weight: 500; /* Peso de la fuente */
+}
+
+:host ::ng-deep .p-menu .p-menuitem-link:hover {
+  background-color: #f1f3f5; /* Color de fondo al pasar el ratón */
+  transform: translateX(5px); /* Efecto de desplazamiento */
+}
+
+:host ::ng-deep .p-menu .p-menuitem-icon {
+  margin-right: 0.5rem;
+  color: #007bff; /* Color del icono */
+}
+
+:host ::ng-deep .p-menu .p-menuitem-text {
+  font-size: 1rem; /* Tamaño de la fuente */
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+}

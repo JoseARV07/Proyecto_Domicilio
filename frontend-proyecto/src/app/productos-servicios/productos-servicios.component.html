@@ -1,0 +1,135 @@
+<div class="productos-servicios-container">
+    <h2 class="productos-servicios-title">Lista de Productos y Servicios</h2>
+    
+    <div class="controls-container">
+      <div class="search-container">
+        <i class="pi pi-search search-icon"></i>
+        <input type="text" class="search-input" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar productos/servicios...">
+      </div>
+
+      <div class="button-group">
+        <button (click)="toggleNoDisponibles()" class="icon-button tooltip">
+          <i class="pi" [ngClass]="mostrandoNoDisponibles ? 'pi-eye' : 'pi-eye-slash'"></i>
+          <span class="tooltiptext">{{ mostrandoNoDisponibles ? 'Ocultar no disponibles' : 'Mostrar no disponibles' }}</span>
+        </button>
+        <button (click)="abrirFormularioCreacion()" class="icon-button tooltip">
+          <i class="pi pi-plus"></i>
+          <span class="tooltiptext">Crear nuevo producto/servicio</span>
+        </button>
+        <button (click)="exportarProductosServicios()" class="icon-button tooltip">
+          <i class="pi pi-file-excel"></i>
+          <span class="tooltiptext">Exportar a Excel</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="table-wrapper" *ngIf="!cargando">
+      <table>
+        <thead>
+          <tr>
+            <th *ngFor="let columna of columnasVisibles" (click)="ordenar(columna)">
+              {{obtenerNombreColumna(columna)}}
+              <i class="pi" [ngClass]="{'pi-sort-amount-up-alt': ordenAscendente, 'pi-sort-amount-down': !ordenAscendente}" *ngIf="columnaOrdenada === columna"></i>
+            </th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let productoServicio of productoServiciosFiltrados">
+            <td *ngFor="let columna of columnasVisibles">
+              <ng-container [ngSwitch]="columna">
+                <ng-container *ngSwitchCase="'id_proveedor'">
+                  {{ obtenerNombreProveedor(productoServicio.id_proveedor) }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'disponibilidad'">
+                  {{ productoServicio.disponibilidad ? 'Sí' : 'No' }}
+                </ng-container>
+                <ng-container *ngSwitchCase="'precio'">
+                  {{ formatearPrecio(productoServicio.precio) }}
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  {{ productoServicio[columna] }}
+                </ng-container>
+              </ng-container>
+            </td>
+            <td>
+              <button class="icon-button edit tooltip" (click)="editarProductoServicio(productoServicio)" data-tooltip="Editar">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button class="icon-button delete tooltip" (click)="eliminarProductoServicio(productoServicio.id_producto_servicio)" data-tooltip="Eliminar">
+                <i class="pi pi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
+      <span>Página {{paginaActual}} de {{totalPaginas}}</span>
+      <button (click)="cambiarPagina(1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+    </div>
+  </div>
+  
+  <!-- Modal para editar/crear producto/servicio -->
+  <div class="modal" [class.show]="mostrarModal">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <h3>{{ productoServicioSeleccionado.id_producto_servicio ? 'Editar Producto/Servicio' : 'Crear Producto/Servicio' }}</h3>
+      <form (ngSubmit)="guardarProductoServicio()" #productoServicioForm="ngForm">
+        <div class="form-group">
+          <label for="id_proveedor">Proveedor</label>
+          <select id="id_proveedor" 
+                  [(ngModel)]="productoServicioSeleccionado.id_proveedor" 
+                  name="id_proveedor" 
+                  required>
+            <option value="">Seleccione un proveedor</option>
+            <option *ngFor="let proveedor of proveedores" [value]="proveedor.id_proveedor">
+              {{proveedor.nombre}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" [(ngModel)]="productoServicioSeleccionado.nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" [(ngModel)]="productoServicioSeleccionado.descripcion" name="descripcion"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="precio">Precio</label>
+          <input type="text" id="precio" 
+                 [ngModel]="formatearPrecio(productoServicioSeleccionado.precio)" 
+                 (input)="onPrecioInput($event)"
+                 name="precio" 
+                 required>
+        </div>
+        <div class="form-group">
+          <label for="categoria">Categoría</label>
+          <input type="text" id="categoria" [(ngModel)]="productoServicioSeleccionado.categoria" name="categoria" required>
+        </div>
+        <div class="form-group">
+          <label for="disponibilidad">Disponibilidad</label>
+          <p-inputSwitch id="disponibilidad" [(ngModel)]="productoServicioSeleccionado.disponibilidad" name="disponibilidad"></p-inputSwitch>
+        </div>
+        <div class="form-button-group">
+          <button type="submit" class="icon-button save" [disabled]="!productoServicioForm.form.valid">
+            <i class="pi pi-save"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<p-confirmDialog [style]="{width: '400px'}" [baseZIndex]="10000" styleClass="custom-confirm-dialog">
+</p-confirmDialog>
+
+<p-toast></p-toast>

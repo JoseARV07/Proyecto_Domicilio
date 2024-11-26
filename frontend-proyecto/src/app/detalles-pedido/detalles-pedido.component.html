@@ -1,0 +1,150 @@
+<div class="detalle-pedido-container">
+    <h2 class="detalle-pedido-title">Detalles de Pedido</h2>
+    
+    <div class="controls-container">
+      <div class="search-container">
+        <i class="pi pi-search search-icon"></i>
+        <input type="text" class="search-input" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar detalles de pedido...">
+      </div>
+
+      <div class="button-group">
+        <button (click)="abrirFormularioCreacion()" class="icon-button tooltip">
+          <i class="pi pi-plus"></i>
+          <span class="tooltiptext">Crear nuevo detalle de pedido</span>
+        </button>
+        <button (click)="exportarDetallesPedido()" class="icon-button tooltip">
+          <i class="pi pi-file-excel"></i>
+          <span class="tooltiptext">Exportar a Excel</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="table-wrapper" *ngIf="!cargando">
+      <table>
+        <thead>
+          <tr>
+            <th *ngFor="let columna of columnasVisibles" (click)="ordenar(columna)">
+              {{obtenerNombreColumna(columna)}}
+              <i class="pi" [ngClass]="{'pi-sort-amount-up-alt': ordenAscendente, 'pi-sort-amount-down': !ordenAscendente}" *ngIf="columnaOrdenada === columna"></i>
+            </th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let detalle of detallesPedidoFiltrados">
+            <td>{{ detalle.id_detalle }}</td>
+            <td>{{ detalle.nombre_pedido }}</td>
+            <td>{{ detalle['pedido_usuario'] }}</td>
+            <td>{{ detalle.nombre_producto_servicio }}</td>
+            <td>{{ detalle.cantidad }}</td>
+            <td>{{ formatearPrecio(detalle.precio_unitario) }}</td>
+            <td>{{ formatearPrecio(detalle.subtotal) }}</td>
+            <td>
+              <button (click)="editarDetallePedido(detalle)" class="icon-button edit tooltip">
+                <i class="pi pi-pencil"></i>
+                <span class="tooltiptext">Editar detalle de pedido</span>
+              </button>
+              <button (click)="eliminarDetallePedido(detalle.id_detalle)" 
+                      class="icon-button delete tooltip" 
+                      [disabled]="detalle.id_detalle === undefined">
+                <i class="pi pi-trash"></i>
+                <span class="tooltiptext">Eliminar detalle de pedido</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 1">Anterior</button>
+      <span>Página {{paginaActual}} de {{totalPaginas}}</span>
+      <button (click)="cambiarPagina(1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+    </div>
+  </div>
+  
+  <!-- Modal para editar/crear detalle de pedido -->
+  <div class="modal" [class.show]="mostrarModal">
+    <div class="modal-content">
+      <span class="close" (click)="cerrarModal()">&times;</span>
+      <h3>{{ detallePedidoSeleccionado.id_detalle ? 'Editar Detalle de Pedido' : 'Crear Detalle de Pedido' }}</h3>
+      <form (ngSubmit)="guardarDetallePedido()" #detallePedidoForm="ngForm">
+        <div class="form-group">
+          <label for="id_usuario">Usuario</label>
+          <select id="id_usuario" 
+                  [(ngModel)]="usuarioSeleccionado" 
+                  name="id_usuario" 
+                  required>
+            <option [ngValue]="null">Seleccione un usuario</option>
+            <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id_usuario">
+              {{usuario.nombre}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="id_pedido">Pedido</label>
+          <select id="id_pedido" 
+                  [(ngModel)]="detallePedidoSeleccionado.id_pedido" 
+                  name="id_pedido" 
+                  required>
+            <option [ngValue]="null">Seleccione un pedido</option>
+            <option *ngFor="let pedido of pedidosDelUsuario" [ngValue]="pedido.id_pedido">
+              Pedido de {{pedido.nombre_usuario}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="id_producto_servicio">Producto/Servicio</label>
+          <select id="id_producto_servicio" 
+                  [(ngModel)]="detallePedidoSeleccionado.id_producto_servicio" 
+                  name="id_producto_servicio" 
+                  required
+                  (change)="actualizarPrecioUnitario()">
+            <option [ngValue]="null">Seleccione un producto/servicio</option>
+            <option *ngFor="let producto of productosServicios" [ngValue]="producto.id_producto_servicio">
+              {{producto.nombre}} - {{formatearPrecio(producto.precio)}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="precio_unitario">Precio Unitario</label>
+          <input type="text" 
+                 id="precio_unitario" 
+                 [ngModel]="formatearPrecio(detallePedidoSeleccionado.precio_unitario)" 
+                 (ngModelChange)="detallePedidoSeleccionado.precio_unitario = $event"
+                 name="precio_unitario" 
+                 required
+                 readonly>
+        </div>
+        <div class="form-group">
+          <label for="cantidad">Cantidad</label>
+          <select id="cantidad" 
+                  [(ngModel)]="detallePedidoSeleccionado.cantidad" 
+                  name="cantidad" 
+                  required
+                  (change)="calcularSubtotal()">
+            <option *ngFor="let cantidad of cantidadesDisponibles" [value]="cantidad">
+              {{cantidad}}
+            </option>
+          </select>
+        </div>
+        <div class="form-button-group">
+          <button type="submit" class="icon-button save" [disabled]="!detallePedidoForm.form.valid">
+            <i class="pi pi-save"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<p-confirmDialog [style]="{width: '400px'}" [baseZIndex]="10000" styleClass="custom-confirm-dialog">
+</p-confirmDialog>
+
+<!-- Añade esto al final del archivo, justo después del p-confirmDialog -->
+<p-toast key="bc"></p-toast>

@@ -1,0 +1,658 @@
+/* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Contenedor principal */
+  .productos-servicios-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Título de productos y servicios */
+  .productos-servicios-title {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  /* Estilos de tabla mejorados */
+  .table-wrapper {
+    margin-left: -20px;
+    width: calc(100% + 40px);
+    overflow-x: auto;
+    margin-top: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    background: white;
+    overflow: visible;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  thead {
+    background-color: #3586ff;
+    color: white;
+  }
+  
+  th {
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #5ba4ff;
+    transition: all 0.3s ease;
+  }
+  
+  th:hover {
+    background-color: #5ba4ff;
+  }
+  
+  td {
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 300;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    transition: all 0.3s ease;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tbody tr {
+    transition: all 0.3s ease;
+  }
+  
+  tbody tr:hover {
+    background-color: #f0f8ff;
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Animación para las filas de la tabla */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  tbody tr {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+  }
+  
+  tbody tr:nth-child(1) { animation-delay: 0.1s; }
+  tbody tr:nth-child(2) { animation-delay: 0.2s; }
+  tbody tr:nth-child(3) { animation-delay: 0.3s; }
+  tbody tr:nth-child(4) { animation-delay: 0.4s; }
+  tbody tr:nth-child(5) { animation-delay: 0.5s; }
+  
+  /* Estilos de botones */
+  button {
+    margin-right: 5px;
+    padding: 8px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    outline: none;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  /* Estilos de modal */
+  .modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .modal.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .modal-content {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 450px;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+  
+  .modal.show .modal-content {
+    transform: translateY(0);
+  }
+  
+  .close {
+    color: #aaa;
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  /* Estilos del formulario */
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: #3586ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(53, 134, 255, 0.2);
+  }
+  
+  /* Estilos para los controles */
+  .controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .search-container {
+    position: relative;
+    max-width: 300px;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .icon-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .icon-button i {
+    font-size: 1.5rem;
+  }
+  
+  /* Colores específicos para cada icono */
+  .icon-button .pi-eye,
+  .icon-button .pi-eye-slash { color: #007bff; }
+  .icon-button .pi-plus { color: #28a745; }
+  .icon-button .pi-file-excel { color: #ffc107; }
+  .icon-button.edit i { color: #ff9800; }
+  .icon-button.delete i { color: #f44336; }
+  .icon-button.save i { color: #28a745; }
+  
+  /* Estilos para el tooltip */
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: auto;
+    min-width: 120px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 14px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  
+  /* Posicionamiento para tooltips fuera de la tabla */
+  .tooltip .tooltiptext {
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+  
+  /* Ajustes específicos para los tooltips en la tabla */
+  td .tooltip .tooltiptext {
+    bottom: auto;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  td .tooltip .tooltiptext::after {
+    top: 100%;
+    bottom: auto;
+    border-color: #333 transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Asegurar que la tabla no oculte los tooltips */
+  .table-wrapper {
+    overflow: visible;
+  }
+  
+  table {
+    position: relative;
+  }
+  
+  /* Mantener los botones de acción en su lugar */
+  td:last-child {
+    position: relative;
+    white-space: nowrap;
+  }
+  
+  /* Ajuste para dispositivos móviles */
+  @media (max-width: 768px) {
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    
+    td .tooltip .tooltiptext {
+      left: auto;
+      right: 0;
+      transform: translateX(0);
+    }
+    
+    td .tooltip .tooltiptext::after {
+      left: auto;
+      right: 10px;
+    }
+  }
+  
+  /* Separar los botones de acciones en la tabla */
+  td:last-child {
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  /* Ajustar el tamaño de los iconos en los botones de acción de la tabla */
+  td:last-child .icon-button i {
+    font-size: 1.2rem;
+  }
+  
+  /* Estilos para la paginación */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .pagination button {
+    background-color: #3586ff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination button:hover:not(:disabled) {
+    background-color: #2a6abf;
+  }
+  
+  .pagination span {
+    margin: 0 1rem;
+  }
+  
+  /* Estilos para el spinner de carga */
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .form-button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  /* Estilos de diálogo de confirmación personalizados */
+  :host ::ng-deep .custom-confirm-dialog {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-header,
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-content,
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-footer {
+    background-color: white;
+    border: none;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-header {
+    padding: 1.5rem 1.5rem 0.5rem;
+    text-align: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-title {
+    font-weight: bold;
+    color: #333;
+    width: 100%;
+    text-align: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-content {
+    padding: 1.5rem;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-footer {
+    padding: 1rem 1.5rem 1.5rem;
+    text-align: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-icon {
+    font-size: 2.5rem;
+    color: #ffa726;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    float: left;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-message {
+    line-height: 1.5;
+    font-size: 1rem;
+    margin-left: 0;
+    text-align: left;
+    display: block;
+    overflow: hidden;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button {
+    margin: 0 1rem;
+    background: transparent !important;
+    border: none !important;
+    padding: 0.5rem;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button .p-button-icon {
+    font-size: 2.5rem;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:hover,
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:focus,
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button.p-button-success .p-button-icon {
+    color: #4caf50 !important;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button.p-button-danger .p-button-icon {
+    color: #f44336 !important;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-header-icons {
+    display: none;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button {
+    transition: transform 0.2s ease;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:hover {
+    transform: scale(1.1);
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:active {
+    transform: scale(0.95);
+  }
+
+.form-button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.icon-button.save {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.icon-button.save i {
+  color: #28a745;
+  font-size: 2.2rem;
+}
+
+.icon-button.save:hover {
+  transform: scale(1.1);
+}
+
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 12 12'%3E%3Cpath d='M10.293 3.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L6 7.586l4.293-4.293z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+.form-group select:focus {
+  border-color: #3586ff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(53, 134, 255, 0.2);
+}
+
+.form-group select::-ms-expand {
+  display: none;
+}
+
+/* Estilo para el scrollbar del select */
+.form-group select {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.form-group select::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-group select::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.form-group select::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+  border: 2px solid #f1f1f1;
+}
+
+.form-group select::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Estilos para el tooltip personalizado */
+.custom-tooltip {
+  position: fixed;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 12px;
+  z-index: 1000;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.custom-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Ocultar los tooltips originales */
+.tooltip .tooltiptext {
+  display: none;
+}
+
+/* Asegurar que la tabla no oculte los tooltips */
+.table-wrapper {
+  overflow: visible;
+}
+
+table {
+  position: relative;
+}
+
+/* Mantener los botones de acción en su lugar */
+td:last-child {
+  position: relative;
+  white-space: nowrap;
+}

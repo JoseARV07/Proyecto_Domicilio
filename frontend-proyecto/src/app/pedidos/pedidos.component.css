@@ -1,0 +1,875 @@
+/* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Contenedor principal */
+  .pedidos-container {
+    max-width: none; /* Quitamos el ancho máximo para que se ajuste al espacio disponible */
+    margin-left: 0; /* Eliminamos el margen izquierdo */
+    padding: 1rem 1rem 1rem 0; /* Reducimos el padding izquierdo */
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Título de pedidos */
+  .pedidos-title {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  /* Estilos de tabla mejorados */
+  .table-wrapper {
+    overflow-x: auto;
+    margin-top: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    background: white;
+    animation: fadeInUp 0.5s ease-out;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  th, td {
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  /* Estilo mejorado para el encabezado */
+  th {
+    background-color: #3586ff;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+  }
+  
+  /* Línea decorativa debajo del encabezado */
+  th::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #ffffff, #3586ff, #ffffff);
+  }
+  
+  /* Estilos para las celdas del cuerpo */
+  td {
+    font-weight: 400;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Efecto hover en las filas */
+  tbody tr:hover {
+    background-color: #f0f8ff;
+  }
+  
+  /* Estilo para filas alternas */
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Mantener los botones de acción en su lugar */
+  td:last-child {
+    white-space: nowrap;
+  }
+  
+  /* Responsive design */
+  @media screen and (max-width: 768px) {
+    .table-wrapper {
+      border-radius: 8px;
+    }
+    
+    table {
+      font-size: 12px;
+    }
+    
+    th, td {
+      padding: 10px;
+    }
+  }
+  
+  /* Asegúrate de que los tooltips funcionen correctamente */
+  .tooltip {
+    position: relative;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Estilos generales para los botones de iconos */
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 12px;  /* Aumentado el padding para hacer los botones más grandes */
+    transition: opacity 0.3s ease;
+    position: relative;
+  }
+  
+  .icon-button i {
+    font-size: 1.5rem;  /* Aumentado el tamaño del icono */
+  }
+  
+  /* Estilos específicos para los botones de acciones en la tabla */
+  td .icon-button {
+    padding: 10px;  /* Un poco menos de padding para los botones en la tabla */
+  }
+  
+  td .icon-button i {
+    font-size: 1.3rem;  /* Ligeramente más pequeño que los botones principales, pero aún más grande que antes */
+  }
+  
+  /* Ajustar el espacio entre los botones de acciones */
+  td:last-child {
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    gap: 0.7rem;  /* Aumentado el espacio entre botones */
+  }
+  
+  /* Colores específicos para cada icono */
+  .icon-button .pi-eye,
+  .icon-button .pi-eye-slash { color: #007bff; }
+  .icon-button .pi-plus { color: #28a745; }
+  .icon-button .pi-file-excel { color: #ffc107; }
+  .icon-button.edit i { color: #ff9800; }
+  .icon-button.delete i { color: #f44336; }
+  .icon-button.save i { color: #28a745; }
+  
+  /* Tooltips mejorados */
+  [data-tooltip] {
+    position: relative;
+  }
+  
+  [data-tooltip]:before,
+  [data-tooltip]:after {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    pointer-events: none;
+  }
+  
+  [data-tooltip]:hover:before,
+  [data-tooltip]:hover:after {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  [data-tooltip]:before {
+    content: '';
+    border: 6px solid transparent;
+    z-index: 1001;
+  }
+  
+  [data-tooltip]:after {
+    content: attr(data-tooltip);
+    background-color: #333;
+    color: #fff;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 12px;
+    white-space: nowrap;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+  }
+  
+  [data-tooltip]:before {
+    border-top-color: #333;
+    margin-bottom: -12px;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  [data-tooltip]:after {
+    margin-bottom: 6px;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Mantén los estilos existentes para los demás elementos */
+  
+  /* Estilos del modal y formulario */
+  .modal-content {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  .modal-content h3 {
+    color: #333;
+    font-size: 24px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-right: 30px;
+  }
+  
+  /* Estilos para el formulario */
+  form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    appearance: none;
+  }
+  
+  /* Estilo mejorado para los dropdowns */
+  .form-group select {
+    background-image: 
+      linear-gradient(45deg, transparent 50%, #333 50%),
+      linear-gradient(135deg, #333 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px);
+    background-size:
+      5px 5px,
+      5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 30px;
+  }
+  
+  /* Efecto hover para los dropdowns */
+  .form-group select:hover {
+    border-color: #3586ff;
+    box-shadow: 0 0 0 3px rgba(53, 134, 255, 0.1);
+  }
+  
+  /* Efecto focus para inputs y selects */
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: #3586ff;
+    box-shadow: 0 0 0 3px rgba(53, 134, 255, 0.25);
+    outline: none;
+  }
+  
+  /* Hacer que el campo de dirección ocupe todo el ancho */
+  .form-group:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+  
+  /* Ajustar el tamaño del input de dirección para que coincida con los dropdowns */
+  .form-group input[name="direccion_entrega"] {
+    height: 38px; /* Ajusta este valor para que coincida con la altura de tus dropdowns */
+  }
+  
+  /* Animación suave para los dropdowns al abrir */
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .form-group select option {
+    animation: slideDown 0.2s ease-out;
+  }
+  
+  /* Estilo para campos de solo lectura */
+  .form-group input[readonly] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+  }
+  
+  /* Mantener los estilos existentes para los botones */
+  .form-button-group {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* Campos que ocupan todo el ancho */
+  .form-group:nth-child(5),
+  .form-group:nth-child(6),
+  .form-group:last-child {
+    grid-column: 1 / -1;
+  }
+  
+  /* Efecto hover en los inputs y selects */
+  .form-group input:hover,
+  .form-group select:hover {
+    border-color: #3586ff;
+  }
+  
+  .icon-button.save:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .icon-button.save i {
+    margin-right: 8px;
+  }
+  
+  /* Animación suave al cargar el formulario */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  form {
+    animation: fadeInUp 0.5s ease-out;
+  }
+  
+  /* Estilos del modal */
+  .modal {
+    display: flex;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.09s ease, visibility 0.09s ease;
+  }
+  
+  .modal.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  
+  .modal.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  /* Estilos para los controles */
+  .controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .search-container {
+    position: relative;
+    max-width: 300px;
+    margin-right: 1rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.7rem 0.7rem 0.7rem 2.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .search-input:hover,
+  .search-input:focus {
+    border-color: #3586ff;
+    box-shadow: 0 0 0 3px rgba(53, 134, 255, 0.1);
+    outline: none;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1.2rem;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  /* Estilos para el tooltip */
+  .tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: auto;
+    min-width: 120px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 14px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  
+  /* Posicionamiento para tooltips fuera de la tabla */
+  .tooltip .tooltiptext {
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
+  
+  /* Ajustes específicos para los tooltips en la tabla */
+  td .tooltip .tooltiptext {
+    bottom: auto;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  td .tooltip .tooltiptext::after {
+    top: 100%;
+    bottom: auto;
+    border-color: #333 transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Asegurar que la tabla no oculte los tooltips */
+  .table-wrapper {
+    overflow: visible;
+  }
+  
+  table {
+    position: relative;
+  }
+  
+  /* Mantener los botones de acción en su lugar */
+  td:last-child {
+    position: relative;
+    white-space: nowrap;
+  }
+  
+  /* Ajuste para dispositivos móviles */
+  @media (max-width: 768px) {
+    .table-wrapper {
+      margin-left: -20px;
+      margin-right: -20px;
+      width: calc(100% + 40px);
+      border-radius: 0;
+    }
+    
+    td .tooltip .tooltiptext {
+      left: auto;
+      right: 0;
+      transform: translateX(0);
+    }
+    
+    td .tooltip .tooltiptext::after {
+      left: auto;
+      right: 10px;
+    }
+  }
+  
+  /* Separar los botones de acciones en la tabla */
+  td:last-child {
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  /* Ajustar el tamaño de los iconos en los botones de acción de la tabla */
+  td:last-child .icon-button i {
+    font-size: 1.2rem;
+  }
+  
+  /* Estilos para la paginación */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .pagination button {
+    background-color: #3586ff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination button:hover:not(:disabled) {
+    background-color: #2a6abf;
+  }
+  
+  .pagination span {
+    margin: 0 1rem;
+  }
+  
+  /* Estilos para el spinner de carga */
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Estilos de diálogo de confirmación personalizados */
+  :host ::ng-deep .custom-confirm-dialog {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-header,
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-content,
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-footer {
+    background-color: white;
+    border: none;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-header {
+    padding: 1.5rem 1.5rem 0.5rem;
+    text-align: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-title {
+    font-weight: bold;
+    color: #333;
+    width: 100%;
+    text-align: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-content {
+    padding: 1.5rem;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-footer {
+    padding: 1rem 1.5rem 1.5rem;
+    text-align: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-icon {
+    font-size: 2.5rem;
+    color: #ffa726;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-message {
+    line-height: 1.5;
+    font-size: 1rem;
+    margin-left: 0;
+    text-align: left;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-confirm-dialog-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button {
+    margin: 0 1rem;
+    background: transparent !important;
+    border: none !important;
+    padding: 0.5rem;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button .p-button-icon {
+    font-size: 2.5rem;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:hover,
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:focus,
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button.p-button-success .p-button-icon {
+    color: #4caf50 !important;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button.p-button-danger .p-button-icon {
+    color: #f44336 !important;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .p-dialog-header-icons {
+    display: none;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button {
+    transition: transform 0.2s ease;
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:hover {
+    transform: scale(1.1);
+  }
+  
+  :host ::ng-deep .custom-confirm-dialog .custom-confirm-button:active {
+    transform: scale(0.95);
+  }
+  
+  .form-button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  .icon-button.save {
+    background: none !important; /* Forzar que no haya fondo */
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .icon-button.save i {
+    color: #28a745;
+    font-size: 2.2rem;
+  }
+  
+  .icon-button.save:hover {
+    opacity: 0.8;
+  }
+  
+  .icon-button.save:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Estilos para la "x" de cierre del modal */
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 1001;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  /* Aseguramos que el contenido del modal tenga posición relativa */
+  .modal-content {
+    position: relative;
+    padding-top: 20px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  }
+  
+  /* Responsive design para la tabla */
+  @media screen and (max-width: 600px) {
+    table {
+      font-size: 0.85rem;
+    }
+    
+    th, td {
+      padding: 8px 10px;
+    }
+  }
+  
+  /* Ajustes adicionales si es necesario */
+  .controls-container {
+    margin-bottom: 1rem;
+  }
+  
+  .search-container {
+    margin-right: 1rem;
+  }
+  
+  /* Mantén los estilos existentes para los demás elementos */
+  
+  @keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .icon-button.save.loading i {
+    animation: rotate 1s linear infinite;
+  }
+  
+  /* Estilos más específicos para los botones de acciones en la tabla */
+  table td .icon-button {
+    padding: 12px !important;  /* Forzamos un padding más grande */
+  }
+  
+  table td .icon-button i {
+    font-size: 1.4rem !important;  /* Forzamos un tamaño de fuente más grande */
+  }
+  
+  /* Ajustar el espacio entre los botones de acciones */
+  table td:last-child {
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;  /* Aumentado el espacio entre botones */
+    padding: 10px 0;  /* Añadimos padding vertical para dar más espacio */
+  }
+  
+  /* Asegurarnos de que los botones no se deformen */
+  table td .icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;  /* Ancho fijo */
+    height: 35px;  /* Alto fijo */
+    border-radius: 50%;  /* Forma circular */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Mantener los colores específicos para cada icono */
+  table td .icon-button.edit i { color: #ff9800; }
+  table td .icon-button.delete i { color: #f44336; }
+  
+  /* Animación para las filas de la tabla */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  tbody tr {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+  }
+  
+  tbody tr:nth-child(1) { animation-delay: 0.1s; }
+  tbody tr:nth-child(2) { animation-delay: 0.2s; }
+  tbody tr:nth-child(3) { animation-delay: 0.3s; }
+  tbody tr:nth-child(4) { animation-delay: 0.4s; }
+  tbody tr:nth-child(5) { animation-delay: 0.5s; }
+  /* Añade más si es necesario */
